@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "fnv.h"
 #include "wear_leveling.h"
+#include "wear_leveling_drivers.h"
 #include "wear_leveling_internal.h"
 
 /*
@@ -301,6 +302,7 @@ static wear_leveling_status_t wear_leveling_write_consolidated(void) {
  */
 static wear_leveling_status_t wear_leveling_consolidate_force(void) {
     wl_dprintf("Erasing backing store\n");
+    wear_leveling_unlock();
 
     // Erase the backing store. Expectation is that any un-written values that are read back after this call come back as zero.
     bool ok = backing_store_erase();

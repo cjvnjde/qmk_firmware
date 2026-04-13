@@ -1,4 +1,4 @@
-/* Copyright 2021 @ Keychron (https://www.keychron.com)
+/* Copyright 2021 ~ 2025 @ Keychron (https://www.keychron.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,32 +14,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 #ifdef LED_MATRIX_ENABLE
-/* LED Matrix Driver Configuration */
-#    define DRIVER_COUNT 1
-#    define DRIVER_ADDR_1 0b1110100
+/* SNLED27351 Driver Configuration */
+#    define SNLED27351_I2C_ADDRESS_1 SNLED27351_I2C_ADDRESS_GND
+#    define SNLED27351_PHASE_CHANNEL SNLED27351_SCAN_PHASE_6_CHANNEL
+
+/* LED Current Configuration */
+#    define SNLED27351_CURRENT_TUNE \
+        { 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60 }
 
 /* LED Matrix Configuration */
 #    define LED_MATRIX_LED_COUNT 91
-
-/* Set to infinit, which is use in USB mode by default */
-#    define LED_MATRIX_TIMEOUT LED_MATRIX_TIMEOUT_INFINITE
-/* Allow shutdown of led driver to save power */
-#    define LED_MATRIX_DRIVER_SHUTDOWN_ENABLE
-/* Turn off backlight on low brightness to save power */
-#    define LED_MATRIX_BRIGHTNESS_TURN_OFF_VAL 32
-
-/* LED Matrix Animation modes. Explicitly enabled
- * For full list of effects, see:
- * https://docs.qmk.fm/#/feature_led_matrix?id=led-matrix-effects
- */
-#    define LED_MATRIX_KEYPRESSES
-
-/* Use first 6 channels of LED driver */
-#    define PHASE_CHANNEL MSKPHASE_6CHANNEL
-
-/* Set LED driver current */
-#    define CKLED2001_CURRENT_TUNE \
-        { 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60 }
 
 #endif

@@ -1,4 +1,4 @@
-/* Copyright 2021 @ Keychron (https://www.keychron.com)
+/* Copyright 2021 ~ 2025 @ Keychron (https://www.keychron.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,14 @@
 
 #pragma once
 
-/* Turn off effects when suspended */
-#define RGB_DISABLE_WHEN_USB_SUSPENDED
-#define LED_DISABLE_WHEN_USB_SUSPENDED
+#include "eeconfig_kb.h"
 
-/* DIP switch for Mac/win OS switch */
-#define DIP_SWITCH_PINS \
-    { A8 }
-
-/* Caps lock LED Pin */
-#define LED_CAPS_LOCK_PIN A7
-#define LED_PIN_ON_STATE 1
+/* Shift Register Configuration for Matrix Scan */
+#define HC595_STCP A0
+#define HC595_SHCP A1
+#define HC595_DS C15
+#define HC595_START_INDEX 1
+#define HC595_END_INDEX 16
 
 /* Increase I2C speed to 1000 KHz */
 #define I2C1_TIMINGR_PRESC 0U
@@ -35,13 +32,17 @@
 #define I2C1_TIMINGR_SCLH 15U
 #define I2C1_TIMINGR_SCLL 51U
 
+#if defined(RGB_MATRIX_ENABLE) || defined(LED_MATRIX_ENABLE)
+#    define SNLED27351_SDB_PIN C14
+#endif
+
+/* Bluetooth Configuration */
 #ifdef KC_BLUETOOTH_ENABLE
-/* Hardware configuration */
-#    define USB_BT_MODE_SELECT_PIN A10
+#    define BT_MODE_SELECT_PIN A10
 
 #    define CKBT51_RESET_PIN A9
-#    define CKBT51_INT_INPUT_PIN A5
-#    define BLUETOOTH_INT_INPUT_PIN A6
+#    define WIRELESS_TO_MCU_INT_PIN A6
+#    define MCU_TO_WIRELESS_INT_PIN A5
 
 #    define USB_POWER_SENSE_PIN B1
 #    define USB_POWER_CONNECTED_LEVEL 0
@@ -51,44 +52,30 @@
 
 #    define HOST_DEVICES_COUNT 3
 
-#    define HOST_LED_PIN_LIST \
+#    define BT_INDICATION_LED_PIN_LIST \
         { H3, H3, H3 }
-#    define HOST_LED_PIN_ON_STATE 1
+#    define BT_INDICATION_LED_ON_STATE 1
 
 #    if defined(RGB_MATRIX_ENABLE) || defined(LED_MATRIX_ENABLE)
 
-#        define LED_DRIVER_SHUTDOWN_PIN C14
-
-#        define HOST_LED_MATRIX_LIST \
+#        define BT_INDCATION_LED_MATRIX_LIST \
             { 17, 18, 19 }
 
 #        define BAT_LEVEL_LED_LIST \
             { 17, 18, 19, 20, 21, 22, 23, 24, 25, 26 }
 
-/* Backlit disable timeout when keyboard is disconnected(unit: second) */
-#        define DISCONNECTED_BACKLIGHT_DISABLE_TIMEOUT 40
-
-/* Backlit disable timeout when keyboard is connected(unit: second) */
-#        define CONNECTED_BACKLIGHT_DISABLE_TIMEOUT 600
 #    endif
 
+/* Reinit LED driver on tranport changed */
+#    define LED_DRIVER_REINIT_ON_TRANSPORT_CHANGE
+
 /* Keep USB connection in blueooth mode */
-#    define KEEP_USB_CONNECTION_IN_BLUETOOTH_MODE
+#    define KEEP_USB_CONNECTION_IN_WIRELESS_MODE
 
 /* Enable bluetooth NKRO */
-#    define BLUETOOTH_NKRO_ENABLE
-
-/* Raw hid command for factory test and bluetooth DFU */
-#   define RAW_HID_CMD 0xAA ... 0xAB
-#else
-/* Raw hid command for factory test */
-#   define RAW_HID_CMD 0xAB
+#    define WIRELESS_NKRO_ENABLE
 #endif
 
-/* Emulated EEPROM configuration */
-#define FEE_DENSITY_BYTES FEE_PAGE_SIZE
-#define DYNAMIC_KEYMAP_EEPROM_MAX_ADDR  2047
-
 /* Factory test keys */
-#define FN_KEY1 MO(1)
-#define FN_KEY2 MO(3)
+#define FN_KEY_1 MO(1)
+#define FN_KEY_2 MO(3)

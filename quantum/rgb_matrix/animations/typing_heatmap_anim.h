@@ -1,6 +1,9 @@
 #if defined(RGB_MATRIX_FRAMEBUFFER_EFFECTS) && defined(ENABLE_RGB_MATRIX_TYPING_HEATMAP)
 RGB_MATRIX_EFFECT(TYPING_HEATMAP)
 #    ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#        ifndef RGB_MATRIX_TYPING_HEATMAP_INCREASE_STEP
+#            define RGB_MATRIX_TYPING_HEATMAP_INCREASE_STEP 32
+#        endif
 
 #        ifndef RGB_MATRIX_TYPING_HEATMAP_DECREASE_DELAY_MS
 #            define RGB_MATRIX_TYPING_HEATMAP_DECREASE_DELAY_MS 25
@@ -16,7 +19,7 @@ RGB_MATRIX_EFFECT(TYPING_HEATMAP)
 void process_rgb_matrix_typing_heatmap(uint8_t row, uint8_t col) {
 #        ifdef RGB_MATRIX_TYPING_HEATMAP_SLIM
     // Limit effect to pressed keys
-    g_rgb_frame_buffer[row][col] = qadd8(g_rgb_frame_buffer[row][col], 32);
+    g_rgb_frame_buffer[row][col] = qadd8(g_rgb_frame_buffer[row][col], RGB_MATRIX_TYPING_HEATMAP_INCREASE_STEP);
 #        else
     if (g_led_config.matrix_co[row][col] == NO_LED) { // skip as pressed key doesn't have an led position
         return;
@@ -27,7 +30,7 @@ void process_rgb_matrix_typing_heatmap(uint8_t row, uint8_t col) {
                 continue;
             }
             if (i_row == row && i_col == col) {
-                g_rgb_frame_buffer[row][col] = qadd8(g_rgb_frame_buffer[row][col], 32);
+                g_rgb_frame_buffer[row][col] = qadd8(g_rgb_frame_buffer[row][col], RGB_MATRIX_TYPING_HEATMAP_INCREASE_STEP);
             } else {
 #            define LED_DISTANCE(led_a, led_b) sqrt16(((int16_t)(led_a.x - led_b.x) * (int16_t)(led_a.x - led_b.x)) + ((int16_t)(led_a.y - led_b.y) * (int16_t)(led_a.y - led_b.y)))
                 uint8_t distance = LED_DISTANCE(g_led_config.point[g_led_config.matrix_co[row][col]], g_led_config.point[g_led_config.matrix_co[i_row][i_col]]);
@@ -51,17 +54,19 @@ static uint16_t heatmap_decrease_timer;
 static bool decrease_heatmap_values;
 
 bool TYPING_HEATMAP(effect_params_t* params) {
+    static uint8_t last_iter = 0;
+
     RGB_MATRIX_USE_LIMITS(led_min, led_max);
 
     if (params->init) {
-        rgb_matrix_set_color_all(0, 0, 0);
+        rgb_matrix_region_set_color_all(params->region, 0, 0, 0);
         memset(g_rgb_frame_buffer, 0, sizeof g_rgb_frame_buffer);
     }
 
     // The heatmap animation might run in several iterations depending on
     // `RGB_MATRIX_LED_PROCESS_LIMIT`, therefore we only want to update the
     // timer when the animation starts.
-    if (params->iter == 0) {
+    if (params->iter == 0 && last_iter != params->iter) {
         decrease_heatmap_values = timer_elapsed(heatmap_decrease_timer) >= RGB_MATRIX_TYPING_HEATMAP_DECREASE_DELAY_MS;
 
         // Restart the timer if we are going to decrease the heatmap this frame.
@@ -79,16 +84,17 @@ bool TYPING_HEATMAP(effect_params_t* params) {
                 uint8_t val = g_rgb_frame_buffer[row][col];
                 if (!HAS_ANY_FLAGS(g_led_config.flags[g_led_config.matrix_co[row][col]], params->flags)) continue;
 
-                HSV hsv = {170 - qsub8(val, 85), rgb_matrix_config.hsv.s, scale8((qadd8(170, val) - 170) * 3, rgb_matrix_config.hsv.v)};
-                RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
-                rgb_matrix_set_color(g_led_config.matrix_co[row][col], rgb.r, rgb.g, rgb.b);
+                hsv_t hsv = {170 - qsub8(val, 85), rgb_matrix_config.hsv.s, scale8((qadd8(170, val) - 170) * 3, rgb_matrix_config.hsv.v)};
+                rgb_t rgb = rgb_matrix_hsv_to_rgb(hsv);
+                rgb_matrix_region_set_color(params->region, g_led_config.matrix_co[row][col], rgb.r, rgb.g, rgb.b);
 
-                if (decrease_heatmap_values) {
+                if (decrease_heatmap_values && last_iter != params->iter) {
                     g_rgb_frame_buffer[row][col] = qsub8(val, 1);
                 }
             }
         }
     }
+    last_iter = params->iter;
 
     return rgb_matrix_check_finished_leds(led_max);
 }

@@ -1,4 +1,4 @@
-/* Copyright 2020 QMK
+/* Copyright 2021 ~ 2025 @ Keychron (https://www.keychron.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,9 @@
 #pragma once
 
 #include_next <mcuconf.h>
+
+#undef STM32_LSI_ENABLED
+#define STM32_LSI_ENABLED                   TRUE
 
 /* Set HCLK to 48 MHz as tradeoff of USB lowest clockand and
  * lower power comsumption for bluetooth. Will use dynamic

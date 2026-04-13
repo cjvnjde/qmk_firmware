@@ -5,30 +5,39 @@
 RGB_MATRIX_EFFECT(PIXEL_RAIN)
 #    ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 
-static bool PIXEL_RAIN(effect_params_t* params) {
-    static uint32_t wait_timer = 0;
+static fast_timer_t timer[2]        = { 0, 0 };
 
-    inline uint32_t interval(void) {
-        return 500 / scale16by8(qadd8(rgb_matrix_config.speed, 16), 16);
-    }
+void PIXEL_RAIN_init(void) {
+    timer[0] = timer[1] = 0;
+}
 
-    inline void rain_pixel(uint8_t led_index) {
-        if (!HAS_ANY_FLAGS(g_led_config.flags[led_index], params->flags)) {
-            return;
+bool PIXEL_RAIN(effect_params_t* params) {
+    static uint16_t     index[2]     = {RGB_MATRIX_LED_COUNT + 1, RGB_MATRIX_LED_COUNT + 1};
+    static uint8_t      region_mask  = 0;
+    static bool         timer_update = false;
+
+    if (params->iter == 0) {
+        region_mask |= 0x01 << params->region;
+
+        if (timer_elapsed_fast(timer[params->region]) > (320 - rgb_matrix_config.speed)) {
+            index[params->region] = random8_max(RGB_MATRIX_LED_COUNT);
+            timer_update          = true;
         }
-        if (random8() & 2) {
-            rgb_matrix_set_color(led_index, 0, 0, 0);
-        } else {
-            HSV hsv = {random8(), random8_min_max(127, 255), rgb_matrix_config.hsv.v};
-            RGB rgb = rgb_matrix_hsv_to_rgb(hsv);
-            rgb_matrix_set_color(led_index, rgb.r, rgb.g, rgb.b);
+    } else {
+        if (timer_update) {
+            timer[params->region]        = timer_read_fast();
+            timer_update = false;
         }
-        wait_timer = g_rgb_timer + interval();
+        region_mask = 0;
     }
 
     RGB_MATRIX_USE_LIMITS(led_min, led_max);
-    if (g_rgb_timer > wait_timer) {
-        rain_pixel(random8_max(RGB_MATRIX_LED_COUNT));
+    if (led_min <= index[params->region] && index[params->region] < led_max && HAS_ANY_FLAGS(g_led_config.flags[index[params->region]], params->flags)) {
+        hsv_t hsv = (random8() & 2) ? (hsv_t){0, 0, 0} : (hsv_t){random8(), random8_min_max(127, 255), rgb_matrix_config.hsv.v};
+        rgb_t rgb = rgb_matrix_hsv_to_rgb(hsv);
+        rgb_matrix_region_set_color(params->region, index[params->region], rgb.r, rgb.g, rgb.b);
+
+        index[params->region] = RGB_MATRIX_LED_COUNT + 1;
     }
     return rgb_matrix_check_finished_leds(led_max);
 }
