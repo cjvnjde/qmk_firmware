@@ -8,6 +8,13 @@
 
 This is a keyboard firmware based on the [tmk\_keyboard firmware](https://github.com/tmk/tmk_keyboard) with some useful features for Atmel AVR and ARM controllers, and more specifically, the [OLKB product line](https://olkb.com), the [ErgoDox EZ](https://ergodox-ez.com) keyboard, and the [Clueboard product line](https://clueboard.co).
 
+## My Keyboard
+
+I use a **Keychron K2 Pro ANSI** (`keychron/k2_pro/ansi`).
+
+- Keyboard README: [keyboards/keychron/k2_pro/readme.md](keyboards/keychron/k2_pro/readme.md)
+- Custom keymap in this repo: [`keychron/k2_pro/ansi/white:candysign`](keyboards/keychron/k2_pro/ansi/white/keymaps/candysign/)
+
 ## Documentation
 
 * [See the official documentation on docs.qmk.fm](https://docs.qmk.fm)
