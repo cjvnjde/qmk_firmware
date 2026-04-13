@@ -29,34 +29,39 @@ export PATH="$HOME/.local/share/qmk/bin:$PATH"
 
 Add that line to your `~/.bashrc` or `~/.zshrc` to make it permanent.
 
-## Build & Flash
-
-### Step 1: Build the firmware
+## Build
 
 ```sh
 make keychron/k2_pro/ansi/rgb:via
 ```
 
-This compiles the firmware with [VIA](https://usevia.app/) support, which lets you remap keys and change RGB effects from a browser app without reflashing. The output file is `keychron_k2_pro_ansi_rgb_via.bin` in the repo root.
+This compiles the firmware with [VIA](https://usevia.app/) support, which lets you remap keys and change RGB effects from a browser app without reflashing.
 
 > If you don't want VIA, you can use `make keychron/k2_pro/ansi/rgb:default` instead. You only need to build **one**, not both.
 
-### Step 2: Enter bootloader mode
+## Flash
 
-1. Connect the keyboard with a USB cable.
-2. Move the side switch to **Off**.
-3. Hold **Esc**.
-4. While still holding **Esc**, move the switch to **Cable**.
-5. Keep holding **Esc** until the keyboard is detected by your computer.
+### Step 1: Set the side switch to Cable (USB) mode
 
-Alternative: press the physical reset button underneath the space bar.
+The keyboard must be in wired mode. Flashing does not work over Bluetooth.
 
-### Step 3: Flash
+### Step 2: Run the flash command
 
 ```sh
 make keychron/k2_pro/ansi/rgb:via:flash
 ```
 
-This builds (if needed) and flashes in one step. The keyboard will reboot automatically when done.
+The firmware will compile (if not already built) and then the terminal will print a message saying it's **waiting for the keyboard to enter bootloader mode**. Don't touch anything yet — leave this running.
 
-> **Note:** Flashing must be done over USB, not Bluetooth.
+### Step 3: Put the keyboard into bootloader
+
+While the terminal is waiting:
+
+1. **Unplug** the USB cable from the keyboard.
+2. **Press and hold Esc** on the keyboard.
+3. **While still holding Esc**, plug the USB cable back in.
+4. Keep holding Esc until the flash process starts in the terminal.
+
+The terminal will detect the keyboard in bootloader mode and flash automatically. When it's done the keyboard will reboot and you're good to go.
+
+> **Tip:** If it doesn't work, try the physical reset button underneath the space bar (use a paperclip) instead of holding Esc.
