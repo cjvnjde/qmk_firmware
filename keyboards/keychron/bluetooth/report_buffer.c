@@ -127,7 +127,7 @@ void report_buffer_task(void) {
         if (pending_data) {
 #if defined(NKRO_ENABLE) && defined(BLUETOOTH_NKRO_ENABLE)
             if (kb_rpt.type == REPORT_TYPE_NKRO && bluetooth_transport.send_nkro) {
-                bluetooth_transport.send_nkro(&kb_rpt.keyboard.nkro.mods);
+                bluetooth_transport.send_nkro(&kb_rpt.nkro.mods);
             } else if (kb_rpt.type == REPORT_TYPE_KB && bluetooth_transport.send_keyboard)
                 bluetooth_transport.send_keyboard(&kb_rpt.keyboard.mods);
 #else

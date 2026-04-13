@@ -18,8 +18,7 @@
 
 #ifdef LED_MATRIX_ENABLE
 /* LED matrix driver configuration */
-#    define DRIVER_COUNT 1
-#    define DRIVER_ADDR_1 0b1110100
+#    define SNLED27351_I2C_ADDRESS_1 SNLED27351_I2C_ADDRESS_GND
 #    define DRIVER_1_LED_COUNT 87
 #    define LED_MATRIX_LED_COUNT DRIVER_1_LED_COUNT
 
@@ -41,10 +40,10 @@
 #    define LED_MATRIX_KEYPRESSES
 
 /* Use first 6 channels of LED driver */
-#    define PHASE_CHANNEL MSKPHASE_6CHANNEL
+#    define SNLED27351_PHASE_CHANNEL SNLED27351_SCAN_PHASE_6_CHANNEL
 
 /* Set LED driver current */
-#    define CKLED2001_CURRENT_TUNE \
+#    define SNLED27351_CURRENT_TUNE \
         { 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60 }
 
 #endif

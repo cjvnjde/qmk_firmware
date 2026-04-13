@@ -1,4 +1,4 @@
-/* Copyright 2022 QMK
+/* Copyright 2023 @ lokher (https://www.keychron.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,29 +13,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+#include "hal.h"
 
+#if (HAL_USE_RTC)
 
-#pragma once
+#    include "rtc_timer.h"
 
-#include_next <mcuconf.h>
+void rtc_timer_init(void) {
+    rtc_timer_clear();
+}
 
-/* K2 Pro uses RTC with LSI clock - must be enabled */
-#undef STM32_LSI_ENABLED
-#define STM32_LSI_ENABLED TRUE
+void rtc_timer_clear(void) {
+    RTCDateTime tm = {0, 0, 0, 0, 0, 0};
+    rtcSetTime(&RTCD1, &tm);
+}
 
-/* Set HCLK to 48 MHz as tradeoff of USB lowest clockand and
- * lower power comsumption for bluetooth. Will use dynamic
- * clock when STM32L4 is supported in ChibiOS */
-#undef STM32_PLLM_VALUE
-#define STM32_PLLM_VALUE 2
+uint32_t rtc_timer_read_ms(void) {
+    RTCDateTime tm;
+    rtcGetTime(&RTCD1, &tm);
 
-#undef STM32_PLLN_VALUE
-#define STM32_PLLN_VALUE 12
+    return tm.millisecond;
+}
 
-#undef STM32_I2C_USE_I2C1
-#define STM32_I2C_USE_I2C1 TRUE
+uint32_t rtc_timer_elapsed_ms(uint32_t last) {
+    return TIMER_DIFF_32(rtc_timer_read_ms(), last);
+}
 
-#ifdef KC_BLUETOOTH_ENABLE
-#    undef STM32_SERIAL_USE_USART2
-#    define STM32_SERIAL_USE_USART2 TRUE
 #endif

@@ -19,6 +19,7 @@
 #include "transport.h"
 #include "battery.h"
 #include "eeconfig.h"
+#include "nvm_eeprom_eeconfig_internal.h"
 #include "bluetooth_config.h"
 #include "config.h"
 #include "rtc_timer.h"

@@ -446,6 +446,27 @@ __attribute__((weak)) void restart_usb_driver(USBDriver *usbp) {
     usbConnectBus(usbp);
 }
 
+#if defined(KC_BLUETOOTH_ENABLE)
+__attribute__((weak)) void usb_wakeup(USBDriver *usbp) {
+#    if STM32_USB_USE_OTG1
+    stm32_otg_t *otgp = usbp->otg;
+    osalSysLock();
+    if (otgp->PCGCCTL & (PCGCCTL_STPPCLK | PCGCCTL_GATEHCLK)) {
+        otgp->PCGCCTL &= ~(PCGCCTL_STPPCLK | PCGCCTL_GATEHCLK);
+    }
+    _usb_wakeup(usbp);
+    osalSysUnlock();
+#    else
+    (void)usbp;
+#    endif
+}
+
+__attribute__((weak)) void usb_start(USBDriver *usbp) {
+    usbStart(usbp, &usbcfg);
+    usbConnectBus(usbp);
+}
+#endif
+
 /* ---------------------------------------------------------
  *                  Keyboard functions
  * ---------------------------------------------------------

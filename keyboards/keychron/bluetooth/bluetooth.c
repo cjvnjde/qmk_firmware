@@ -45,11 +45,12 @@ uint8_t                      bluetooth_report_protocol = true;
 /* declarations */
 uint8_t bluetooth_keyboard_leds(void);
 void    bluetooth_send_keyboard(report_keyboard_t *report);
+void    bluetooth_send_nkro(report_nkro_t *report);
 void    bluetooth_send_mouse(report_mouse_t *report);
 void    bluetooth_send_extra(report_extra_t *report);
 
 /* host struct */
-host_driver_t bluetooth_driver = {bluetooth_keyboard_leds, bluetooth_send_keyboard, bluetooth_send_mouse, bluetooth_send_extra};
+host_driver_t bluetooth_driver = {bluetooth_keyboard_leds, bluetooth_send_keyboard, bluetooth_send_nkro, bluetooth_send_mouse, bluetooth_send_extra};
 
 #define BLUETOOTH_EVENT_QUEUE_SIZE 16
 bluetooth_event_t bt_event_queue[BLUETOOTH_EVENT_QUEUE_SIZE];
@@ -102,7 +103,7 @@ void bluetooth_init(void) {
     rtc_timer_init();
 
 #ifdef BLUETOOTH_NKRO_ENABLE
-    keymap_config.raw = eeconfig_read_keymap();
+    eeconfig_read_keymap(&keymap_config);
     nkro.bluetooth    = keymap_config.nkro;
 #endif
 }
@@ -294,7 +295,31 @@ void bluetooth_send_keyboard(report_keyboard_t *report) {
     if (bt_state == BLUETOOTH_PARING && !pincodeEntry) return;
 
     if (bt_state == BLUETOOTH_CONNECTED || (bt_state == BLUETOOTH_PARING && pincodeEntry)) {
-#if defined(NKRO_ENABLE)
+        if (bluetooth_transport.send_keyboard) {
+#ifndef DISABLE_REPORT_BUFFER
+            if (report_buffer_is_empty() && report_buffer_next_inverval()) {
+                bluetooth_transport.send_keyboard(&report->mods);
+                report_buffer_update_timer();
+            } else {
+                report_buffer_t report_buffer;
+                report_buffer.type = REPORT_TYPE_KB;
+                memcpy(&report_buffer.keyboard, report, sizeof(report_keyboard_t));
+                report_buffer_enqueue(&report_buffer);
+            }
+#else
+            bluetooth_transport.send_keyboard(&report->mods);
+#endif
+        }
+    } else if (bt_state != BLUETOOTH_RESET) {
+        bluetooth_connect();
+    }
+}
+
+void bluetooth_send_nkro(report_nkro_t *report) {
+    if (bt_state == BLUETOOTH_PARING && !pincodeEntry) return;
+
+    if (bt_state == BLUETOOTH_CONNECTED || (bt_state == BLUETOOTH_PARING && pincodeEntry)) {
+#if defined(NKRO_ENABLE) && defined(BLUETOOTH_NKRO_ENABLE)
         if (bluetooth_report_protocol && keymap_config.nkro) {
             if (bluetooth_transport.send_nkro) {
 #    ifndef DISABLE_REPORT_BUFFER
@@ -305,7 +330,7 @@ void bluetooth_send_keyboard(report_keyboard_t *report) {
 
                 report_buffer_t report_buffer;
                 report_buffer.type = REPORT_TYPE_NKRO;
-                memcpy(&report_buffer.keyboard, report, sizeof(report_keyboard_t));
+                memcpy(&report_buffer.nkro, report, sizeof(report_nkro_t));
                 report_buffer_enqueue(&report_buffer);
 
                 if (firstBuffer) {
@@ -313,31 +338,11 @@ void bluetooth_send_keyboard(report_keyboard_t *report) {
                     report_buffer_task();
                 }
 #    else
-                bluetooth_transport.send_nkro(&report->nkro.mods);
+                bluetooth_transport.send_nkro(&report->mods);
 #    endif
             }
-        } else
-#endif
-        {
-            // #ifdef KEYBOARD_SHARED_EP
-            if (bluetooth_transport.send_keyboard) {
-#ifndef DISABLE_REPORT_BUFFER
-                if (report_buffer_is_empty() && report_buffer_next_inverval()) {
-                    bluetooth_transport.send_keyboard(&report->mods);
-                    report_buffer_update_timer();
-                } else {
-                    report_buffer_t report_buffer;
-                    report_buffer.type = REPORT_TYPE_KB;
-                    memcpy(&report_buffer.keyboard, report, sizeof(report_keyboard_t));
-                    report_buffer_enqueue(&report_buffer);
-                }
-#else
-                bluetooth_transport.send_keyboard(&report->mods);
-#endif
-            }
-            // #endif
         }
-
+#endif
     } else if (bt_state != BLUETOOTH_RESET) {
         bluetooth_connect();
     }

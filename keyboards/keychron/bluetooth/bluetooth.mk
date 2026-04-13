@@ -17,6 +17,7 @@ SRC += \
      $(BLUETOOTH_DIR)/rtc_timer.c
 
 VPATH += $(TOP_DIR)/keyboards/keychron/$(BLUETOOTH_DIR)
+VPATH += $(TOP_DIR)/keyboards/keychron/common/wireless
 
 # Work around RTC clock issue without touching chibios, refer to the link for this bug
 # https://forum.chibios.org/viewtopic.php?f=35&t=6197

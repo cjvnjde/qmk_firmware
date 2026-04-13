@@ -1,4 +1,4 @@
-/* Copyright 2022 QMK
+/* Copyright 2022 @ lokher (https://www.keychron.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,28 +14,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef BLUETOOTH_CONFIG_H
+#define BLUETOOTH_CONFIG_H
 
-#pragma once
+#include "config.h"
 
-#include_next <mcuconf.h>
-
-/* K2 Pro uses RTC with LSI clock - must be enabled */
-#undef STM32_LSI_ENABLED
-#define STM32_LSI_ENABLED TRUE
-
-/* Set HCLK to 48 MHz as tradeoff of USB lowest clockand and
- * lower power comsumption for bluetooth. Will use dynamic
- * clock when STM32L4 is supported in ChibiOS */
-#undef STM32_PLLM_VALUE
-#define STM32_PLLM_VALUE 2
-
-#undef STM32_PLLN_VALUE
-#define STM32_PLLN_VALUE 12
-
-#undef STM32_I2C_USE_I2C1
-#define STM32_I2C_USE_I2C1 TRUE
-
-#ifdef KC_BLUETOOTH_ENABLE
-#    undef STM32_SERIAL_USE_USART2
-#    define STM32_SERIAL_USE_USART2 TRUE
+//
+#ifndef HOST_DEVICES_COUNT
+#    define HOST_DEVICES_COUNT                      3
 #endif
+
+//  Uint: Second
+#ifndef DISCONNECTED_BACKLIGHT_OFF_DELAY_TIME
+#    define DISCONNECTED_BACKLIGHT_OFF_DELAY_TIME   40
+#endif
+
+//  Uint: Second, the timer restarts on key activities.
+#ifndef CONNECTED_BACKLIGHT_OFF_DELAY_TIME
+#    define CONNECTED_BACKLIGHT_OFF_DELAY_TIME      600
+#endif
+
+#endif
+

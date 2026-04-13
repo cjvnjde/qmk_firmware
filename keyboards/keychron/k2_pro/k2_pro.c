@@ -23,6 +23,12 @@
 #    include "battery.h"
 #    include "bat_level_animation.h"
 #    include "lpm.h"
+#    ifdef LED_MATRIX_ENABLE
+#        include "snled27351-mono.h"
+#    endif
+#    ifdef RGB_MATRIX_ENABLE
+#        include "snled27351.h"
+#    endif
 #endif
 
 #ifdef ENABLE_FACTORY_TEST
@@ -51,7 +57,17 @@ key_combination_t key_comb_list[4] = {
 bool                   firstDisconnect  = true;
 bool                   bt_factory_reset = false;
 static virtual_timer_t pairing_key_timer;
-extern uint8_t         g_pwm_buffer[DRIVER_COUNT][192];
+
+/* Extern for driver_buffers from snled27351 driver (type not in header) */
+#    if defined(LED_MATRIX_ENABLE) || defined(RGB_MATRIX_ENABLE)
+typedef struct {
+    uint8_t pwm_buffer[192];
+    bool    pwm_buffer_dirty;
+    uint8_t led_control_buffer[24];
+    bool    led_control_buffer_dirty;
+} PACKED snled27351_driver_buf_t;
+extern snled27351_driver_buf_t driver_buffers[];
+#    endif
 
 static void pairing_key_timer_cb(void *arg) {
     bluetooth_pairing_ex(*(uint8_t *)arg, NULL);
@@ -244,9 +260,9 @@ void battery_calculte_voltage(uint16_t value) {
     if (led_matrix_is_enabled()) {
         uint32_t totalBuf = 0;
 
-        for (uint8_t i = 0; i < DRIVER_COUNT; i++)
+        for (uint8_t i = 0; i < SNLED27351_DRIVER_COUNT; i++)
             for (uint8_t j = 0; j < 192; j++)
-                totalBuf += g_pwm_buffer[i][j];
+                totalBuf += driver_buffers[i].pwm_buffer[j];
         /* We assumpt it is linear relationship*/
         voltage += (30 * totalBuf / LED_MATRIX_LED_COUNT / 255);
     }
@@ -255,9 +271,9 @@ void battery_calculte_voltage(uint16_t value) {
     if (rgb_matrix_is_enabled()) {
         uint32_t totalBuf = 0;
 
-        for (uint8_t i = 0; i < DRIVER_COUNT; i++)
+        for (uint8_t i = 0; i < SNLED27351_DRIVER_COUNT; i++)
             for (uint8_t j = 0; j < 192; j++)
-                totalBuf += g_pwm_buffer[i][j];
+                totalBuf += driver_buffers[i].pwm_buffer[j];
         /* We assumpt it is linear relationship*/
         uint32_t compensation = 60 * totalBuf / RGB_MATRIX_LED_COUNT / 255 / 3;
         voltage += compensation;

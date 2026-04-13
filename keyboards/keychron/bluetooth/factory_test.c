@@ -16,6 +16,11 @@
 
 #include "quantum.h"
 #include "raw_hid.h"
+#include "usb_descriptor.h"
+
+#ifndef RAW_EPSIZE
+#    define RAW_EPSIZE 32
+#endif
 #ifdef KC_BLUETOOTH_ENABLE
 #include "transport.h"
 #include "ckbt51.h"

@@ -34,6 +34,7 @@ typedef struct {
     uint8_t type;
     union {
         report_keyboard_t keyboard;
+        report_nkro_t     nkro;
         uint16_t          consumer;
     };
 } report_buffer_t;

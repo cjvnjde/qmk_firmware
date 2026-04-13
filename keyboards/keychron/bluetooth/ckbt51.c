@@ -21,6 +21,11 @@
 #include "battery.h"
 #include "raw_hid.h"
 #include "report_buffer.h"
+#include "usb_descriptor.h"
+
+#ifndef RAW_EPSIZE
+#    define RAW_EPSIZE 32
+#endif
 
 #ifndef CKBT51_INT_INPUT_PIN
 #    error "CKBT51_INT_INPUT_PIN is not defined"
