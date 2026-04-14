@@ -24,6 +24,7 @@
 
 #include "quantum.h"
 #include <usb_main.h>
+extern void restart_usb_driver(USBDriver *usbp);
 #include "wireless.h"
 #include "lpm.h"
 #include "lpm_stm32l43x.h"

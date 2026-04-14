@@ -1,4 +1,4 @@
-/* Copyright 2022 @ Keychron (https://www.keychron.com)
+/* Copyright 2022 ~ 2026 @ Keychron (https://www.keychron.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,40 +16,4 @@
 
 #pragma once
 
-#include "quantum.h"
-#ifdef VIA_ENABLE
-#    include "via.h"
-#endif
-
-#define ___ KC_NO
-
-#ifdef VIA_ENABLE
-#    define USER_START QK_KB_0
-#else
-#    define USER_START SAFE_RANGE
-#endif
-
-// clang-format off
-enum {
-    KC_LOPTN = USER_START,
-    KC_ROPTN,
-    KC_LCMMD,
-    KC_RCMMD,
-    KC_TASK,
-    KC_FILE,
-    KC_SNAP,
-    KC_CTANA,
-    KC_SIRI,
-#ifdef KC_BLUETOOTH_ENABLE
-    BT_HST1,
-    BT_HST2,
-    BT_HST3,
-    BAT_LVL,
-#else
-    BT_HST1 = KC_TRNS,
-    BT_HST2 = KC_TRNS,
-    BT_HST3 = KC_TRNS,
-    BAT_LVL = KC_TRNS,
-#endif
-	NEW_SAFE_RANGE
-};
+#include "keychron.h"

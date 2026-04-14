@@ -1,1 +1,1 @@
-# This file intentionally blank
+KEYCHRON_RGB_ENABLE = yes
