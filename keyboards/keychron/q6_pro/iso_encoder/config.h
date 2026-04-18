@@ -37,7 +37,8 @@
 /* Indication led */
 #    define NUM_LOCK_INDEX 37
 #    define CAPS_LOCK_INDEX 61
-#    define LOW_BAT_IND_INDEX 99
+#    define LOW_BAT_IND_INDEX \
+        { 99 }
 
 /* Enable Reactive Animation */
 #    define RGB_MATRIX_FRAMEBUFFER_EFFECTS

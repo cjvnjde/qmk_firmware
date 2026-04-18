@@ -37,7 +37,8 @@
 #    define RGB_MATRIX_BRIGHTNESS_TURN_OFF_VAL 48
 
 /* Indication led */
-#    define LOW_BAT_IND_INDEX 80
+#    define LOW_BAT_IND_INDEX \
+        { 80 }
 
 #    define RGB_MATRIX_KEYPRESSES
 #    define RGB_MATRIX_FRAMEBUFFER_EFFECTS

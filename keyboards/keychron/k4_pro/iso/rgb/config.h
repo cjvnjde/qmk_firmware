@@ -37,7 +37,8 @@
 /* Indication led */
 #    define CAPS_LOCK_INDEX 54
 #    define NUM_LOCK_INDEX 33
-#    define LOW_BAT_IND_INDEX 92
+#    define LOW_BAT_IND_INDEX \
+        { 92 }
 
 /* RGB Matrix Animation modes. Explicitly enabled
  * For full list of effects, see:

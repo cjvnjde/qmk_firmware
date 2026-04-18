@@ -22,6 +22,7 @@
 #    define SNLED27351_PHASE_CHANNEL SNLED27351_SCAN_PHASE_6_CHANNEL
 
 /* LED Current Configuration */
+#    undef SNLED27351_CURRENT_TUNE
 #    define SNLED27351_CURRENT_TUNE \
         { 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60, 0x60 }
 

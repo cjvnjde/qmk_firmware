@@ -32,7 +32,8 @@
 #    define RGB_MATRIX_BRIGHTNESS_TURN_OFF_VAL 48
 
 #    define CAPS_LOCK_INDEX 28   // Caps Lock
-#    define LOW_BAT_IND_INDEX 56 // Space
+#    define LOW_BAT_IND_INDEX \
+        { 56 }
 
 #    define RGB_MATRIX_KEYPRESSES
 #    define RGB_MATRIX_FRAMEBUFFER_EFFECTS

@@ -44,7 +44,8 @@
 #    define RGB_MATRIX_BRIGHTNESS_TURN_OFF_VAL 32
 
 /* Indication led */
-#    define LOW_BAT_IND_INDEX 84
+#    define LOW_BAT_IND_INDEX \
+        { 84 }
 
 // RGB Matrix Animation modes. Explicitly enabled
 // For full list of effects, see:

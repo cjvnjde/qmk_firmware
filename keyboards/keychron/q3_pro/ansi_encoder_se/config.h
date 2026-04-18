@@ -43,7 +43,8 @@
 /* Turn off backlight on low brightness to save power */
 #    define RGB_MATRIX_BRIGHTNESS_TURN_OFF_VAL 32
 
-#    define LOW_BAT_IND_INDEX 83
+#    define LOW_BAT_IND_INDEX \
+        { 83 }
 
 #    define RGB_MATRIX_KEYPRESSES
 #    define RGB_MATRIX_FRAMEBUFFER_EFFECTS

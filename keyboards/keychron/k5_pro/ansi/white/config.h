@@ -35,7 +35,8 @@
 
 /* Indication led */
 #    define NUM_LOCK_INDEX 37    // NumLock
-#    define LOW_BAT_IND_INDEX 98 // Space
+#    define LOW_BAT_IND_INDEX \
+        { 98 }
 
 // LED Matrix Animation modes. Explicitly enabled
 // For full list of effects, see:

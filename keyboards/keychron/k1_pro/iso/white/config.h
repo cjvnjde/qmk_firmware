@@ -34,7 +34,8 @@
 #    define LED_MATRIX_BRIGHTNESS_TURN_OFF_VAL 48
 
 /* Indication led */
-#    define LOW_BAT_IND_INDEX 80
+#    define LOW_BAT_IND_INDEX \
+        { 80 }
 
 // LED Matrix Animation modes. Explicitly enabled
 // For full list of effects, see:

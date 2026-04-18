@@ -535,7 +535,7 @@ const USB_Descriptor_Device_t PROGMEM DeviceDescriptor = {
 /*
  * Configuration descriptors
  */
-USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor = {
+const USB_Descriptor_Configuration_t PROGMEM ConfigurationDescriptor = {
     .Config = {
         .Header = {
             .Size               = sizeof(USB_Descriptor_Configuration_Header_t),

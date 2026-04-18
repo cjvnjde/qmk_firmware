@@ -35,7 +35,8 @@
 
 #    define DIM_CAPS_LOCK
 #    define CAPS_LOCK_INDEX 28
-#    define LOW_BAT_IND_INDEX 59
+#    define LOW_BAT_IND_INDEX \
+        { 59 }
 
 #    ifdef KC_BLUETOOTH_ENABLE
 #        undef HOST_LED_MATRIX_LIST

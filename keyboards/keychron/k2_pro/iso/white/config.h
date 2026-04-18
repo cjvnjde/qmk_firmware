@@ -24,13 +24,18 @@
 /* Set to infinit, which is use in USB mode by default */
 #    define LED_MATRIX_TIMEOUT LED_MATRIX_TIMEOUT_INFINITE
 /* Allow shutdown of led driver to save power */
-#    define LED_MATRIX_DRIVER_SHUTDOWN_ENABLE
+#    ifndef LED_MATRIX_DRIVER_SHUTDOWN_ENABLE
+#        define LED_MATRIX_DRIVER_SHUTDOWN_ENABLE
+#    endif
 /* Turn off backlight on low brightness to save power */
-#    define LED_MATRIX_BRIGHTNESS_TURN_OFF_VAL 32
+#    ifndef LED_MATRIX_BRIGHTNESS_TURN_OFF_VAL
+#        define LED_MATRIX_BRIGHTNESS_TURN_OFF_VAL 32
+#    endif
 
 #    define DIM_CAPS_LOCK
 #    define CAPS_LOCK_INDEX 46
-#    define LOW_BAT_IND_INDEX 78
+#    define LOW_BAT_IND_INDEX \
+        { 78 }
 
 /* LED Matrix Animation modes. Explicitly enabled
  * For full list of effects, see:

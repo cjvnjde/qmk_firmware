@@ -38,7 +38,8 @@
 
 /* Indication led */
 #    define CAPS_LOCK_INDEX 50
-#    define LOW_BAT_IND_INDEX 79
+#    define LOW_BAT_IND_INDEX \
+        { 79 }
 
 #    define RGB_MATRIX_FRAMEBUFFER_EFFECTS
 #    define RGB_MATRIX_KEYPRESSES

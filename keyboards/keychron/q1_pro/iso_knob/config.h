@@ -40,7 +40,8 @@
 #    define RGB_MATRIX_BRIGHTNESS_TURN_OFF_VAL 32
 
 #    define CAPS_LOCK_INDEX 45
-#    define LOW_BAT_IND_INDEX 76
+#    define LOW_BAT_IND_INDEX \
+        { 76 }
 
 /* RGB Matrix Animation modes. Explicitly enabled
  * For full list of effects, see:

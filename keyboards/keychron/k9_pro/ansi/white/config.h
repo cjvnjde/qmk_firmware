@@ -36,7 +36,8 @@
 /* Indication led index */
 #    define DIM_CAPS_LOCK
 #    define CAPS_LOCK_INDEX 28
-#    define LOW_BAT_IND_INDEX 56
+#    define LOW_BAT_IND_INDEX \
+        { 56 }
 
 // LED Matrix Animation modes. Explicitly enabled
 // For full list of effects, see:

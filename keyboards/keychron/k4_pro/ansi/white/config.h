@@ -32,7 +32,8 @@
 /* Indicatoon led */
 #    define CAPS_LOCK_INDEX 55
 #    define NUM_LOCK_INDEX 33
-#    define LOW_BAT_IND_INDEX 91
+#    define LOW_BAT_IND_INDEX \
+        { 91 }
 
 /* LED Matrix Animation modes. Explicitly enabled
  * For full list of effects, see:

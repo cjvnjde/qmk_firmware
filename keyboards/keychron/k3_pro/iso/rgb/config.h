@@ -37,7 +37,8 @@
 /* Caps lock indicating led */
 #    define DIM_CAPS_LOCK
 #    define CAPS_LOCK_INDEX 46
-#    define LOW_BAT_IND_INDEX 78
+#    define LOW_BAT_IND_INDEX \
+        { 78 }
 
 #    ifdef VIA_ENABLE
 #        define VIA_QMK_RGBLIGHT_ENABLE
