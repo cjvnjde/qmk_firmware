@@ -33,7 +33,7 @@
             }
         ]
     },
-    "dip_switch" :{
+    "dip_switch": {
         "pins": ["B7"]
     },
     "rgb_matrix": {
