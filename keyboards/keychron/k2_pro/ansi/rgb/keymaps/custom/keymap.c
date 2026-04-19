@@ -26,50 +26,9 @@ enum layers {
     WIN_FN
 };
 
-enum custom_keycodes {
-    RGB_STATIC = NEW_SAFE_RANGE,
-    RGB_RAINBOW,
-    RGB_LAYOUT,
-    RGB_GUIDE,
-};
-
 #define FN_MAC MO(MAC_FN)
 #define FN_WIN MO(WIN_FN)
 
-static void set_rgb_mode(uint8_t mode) {
-#ifdef RGB_MATRIX_ENABLE
-    rgb_matrix_enable();
-    rgb_matrix_mode(mode);
-#else
-    (void)mode;
-#endif
-}
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (!record->event.pressed) {
-        return true;
-    }
-
-    switch (keycode) {
-        case RGB_STATIC:
-            set_rgb_mode(RGB_MATRIX_SOLID_COLOR);
-            return false;
-
-        case RGB_RAINBOW:
-            set_rgb_mode(RGB_MATRIX_CYCLE_LEFT_RIGHT);
-            return false;
-
-        case RGB_LAYOUT:
-            set_rgb_mode(RGB_MATRIX_CUSTOM_PER_KEY_RGB);
-            return false;
-
-        case RGB_GUIDE:
-            set_rgb_mode(RGB_MATRIX_CUSTOM_SMART_GUIDE);
-            return false;
-    }
-
-    return true;
-}
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [MAC_BASE] = LAYOUT_ansi_84(
@@ -82,10 +41,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [MAC_FN] = LAYOUT_ansi_84(
         _______,  KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,   KC_F12,   _______,  _______,  UG_TOGG,
-        _______,  BT_HST1,  BT_HST2,  BT_HST3,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
-        UG_TOGG,  UG_NEXT,  KC_UP,    UG_HUEU,  UG_SATU,  UG_SPDU,  UG_VALU,  UG_VALD,  UG_PREV,  UG_HUED,  RGB_STATIC,RGB_RAINBOW,RGB_LAYOUT,RGB_GUIDE,        _______,
-        _______,  KC_LEFT,  KC_DOWN,  KC_RGHT,  UG_SATD,  UG_SPDD,  _______,  QK_AREP,  QK_REP,   _______,  _______,  _______,            _______,            _______,
-        _______,            _______,  _______,  _______,  _______,  BAT_LVL,  NK_TOGG,  _______,  _______,  _______,  _______,            _______,  _______,  _______,
+        _______,  BT_HST1,  BT_HST2,  BT_HST3,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            UG_NEXT,
+        _______,  KC_HOME,  KC_UP,    KC_END,   KC_PGUP,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            UG_HUEU,
+        _______,  KC_LEFT,  KC_DOWN,  KC_RGHT,  KC_PGDN,  _______,  _______,  QK_AREP,  QK_REP,   CW_TOGG,  _______,  _______,            _______,            UG_HUED,
+        _______,            _______,  _______,  _______,  _______,  BAT_LVL,  NK_TOGG,  _______,  _______,  _______,  _______,            _______,  UG_VALU,  UG_VALD,
         _______,  _______,  _______,                                _______,                                _______,  _______,  _______,  _______,  _______,  _______),
 
     [WIN_BASE] = LAYOUT_ansi_84(
@@ -97,10 +56,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LCTL,  KC_LGUI,  KC_LALT,                                KC_SPC,                                 KC_RALT,  FN_WIN,   KC_RCTL,  KC_LEFT,  KC_DOWN,  KC_RGHT),
 
     [WIN_FN] = LAYOUT_ansi_84(
-        _______,  KC_BRID,  KC_BRIU,  KC_TASK,  KC_FILE,  UG_VALD,  UG_VALU,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,  KC_VOLU,  _______,  _______,  UG_TOGG,
-        _______,  BT_HST1,  BT_HST2,  BT_HST3,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
-        UG_TOGG,  UG_NEXT,  KC_UP,    UG_HUEU,  UG_SATU,  UG_SPDU,  UG_VALU,  UG_VALD,  UG_PREV,  UG_HUED,  RGB_STATIC,RGB_RAINBOW,RGB_LAYOUT,RGB_GUIDE,        _______,
-        _______,  KC_LEFT,  KC_DOWN,  KC_RGHT,  UG_SATD,  UG_SPDD,  _______,  QK_AREP,  QK_REP,   _______,  _______,  _______,            _______,            _______,
-        _______,            _______,  _______,  _______,  _______,  BAT_LVL,  NK_TOGG,  _______,  _______,  _______,  _______,            _______,  _______,  _______,
+        _______,  KC_BRID,  KC_BRIU,  KC_TASK,  KC_FILE,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,  KC_VOLU,  _______,  _______,  _______,  _______,  UG_TOGG,
+        _______,  BT_HST1,  BT_HST2,  BT_HST3,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            UG_NEXT,
+        _______,  KC_HOME,  KC_UP,    KC_END,   KC_PGUP,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            UG_HUEU,
+        _______,  KC_LEFT,  KC_DOWN,  KC_RGHT,  KC_PGDN,  _______,  _______,  QK_AREP,  QK_REP,   CW_TOGG,  _______,  _______,            _______,            UG_HUED,
+        _______,            _______,  _______,  _______,  _______,  BAT_LVL,  NK_TOGG,  _______,  _______,  _______,  _______,            _______,  UG_VALU,  UG_VALD,
         _______,  _______,  _______,                                _______,                                _______,  _______,  _______,  _______,  _______,  _______)
 };
