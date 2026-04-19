@@ -85,7 +85,7 @@ The K2 Pro (PCB V1.3, MCU: STM32L432) has SWD pads on the USB-C daughter board l
 * **GND**
 * **3.3V** (do NOT use this one)
 
-![Keychron K2 Pro Pins](https://github.com/cjvnjde/qmk_firmware/tree/main/keyboards/keychron/k2_pro/image/pins.jpg)
+![Keychron K2 Pro Pins](https://github.com/cjvnjde/qmk_firmware/blob/main/keyboards/keychron/k2_pro/image/pins.jpg?raw=true)
 
 ### Step 2: Wire the Raspberry Pi 5 to the K2 Pro
 
