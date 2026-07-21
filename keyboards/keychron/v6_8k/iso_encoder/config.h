@@ -16,23 +16,18 @@
 
 #pragma once
 
-#include "eeconfig_kb.h"
-
-/* Encoder Configuration */
-#define ENCODER_DEFAULT_POS 0x3
-
-/* SNLED27351 Driver Configuration */
 #ifdef RGB_MATRIX_ENABLE
-#    define SPI_DRIVER SPID1
-#    define SPI_SCK_PIN A5
-#    define SPI_MOSI_PIN A7
-#    define SNLED27351_SDB_PIN C4
-#    define SNLED27351_SPI_DIVISOR 64
+/* Set LED driver current */
+#    define SNLED27351_CURRENT_TUNE \
+        { 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72, 0x72 }
+
+/* RGB Matrix Configuration */
+#    define RGB_MATRIX_LED_COUNT 109
+#    define SNLED27351_SELECT_PINS \
+        { A4, A6 }
+
+/* Indications */
+#    define CAPS_LOCK_INDEX 61
+#    define NUM_LOCK_INDEX 37
+
 #endif
-
-/* Custom keycodes */
-#define CUSTOM_KEYCODES_ENABLE
-
-/* Factory test keys */
-#define FN_KEY_1 MO(1)
-#define FN_KEY_2 MO(3)
