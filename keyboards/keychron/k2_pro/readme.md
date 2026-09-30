@@ -12,6 +12,80 @@ A customizable 84-key wireless mechanical keyboard.
 
 This repo is set up for a **Keychron K2 Pro ANSI RGB**.
 
+The keymap is named **`custom`** ([source](ansi/rgb/keymaps/custom/keymap.c)). It includes Dvorak/QWERTY switching, Caps-as-Esc/Fn, navigation shortcuts, repeat keys, Caps Word, and VIA support.
+
+## Layout and Fn usage
+
+* Set the **Mac/Win side switch to Mac for Dvorak**, or **Win for QWERTY**. This switch selects the typing layout; both positions keep the same Ctrl/Win/Alt modifier arrangement.
+* Keep the computer's English input layout set to **US QWERTY**. The keyboard applies Dvorak itself; enabling Dvorak on the computer as well applies a second conversion.
+* **Tap Caps Lock for Escape**, or **hold Caps Lock to access Fn shortcuts**. The regular Fn key works too. Release the held key to return to the typing layer.
+* **F1–F12 send ordinary function keys** without Fn in both layouts.
+
+**All letter shortcuts below refer to physical QWERTY keycap positions**, including in Dvorak mode. For example, Fn + L means the key normally labeled L, which types N in Dvorak.
+
+## Custom keybindings
+
+### Navigation
+
+Hold Fn (or Caps Lock) while pressing these keys. The bindings are identical in both layouts.
+
+| Shortcut | Action |
+|---|---|
+| Fn + Q / E | Home / End |
+| Fn + W / S | Up / Down |
+| Fn + A / D | Left / Right |
+| Fn + R / F | Page Up / Page Down |
+
+Add Shift to select text, for example **Fn + Shift + D** to extend selection to the right.
+
+### Repeat and Caps Word
+
+| Shortcut | Action |
+|---|---|
+| Fn + K | Repeat the last remembered key, including its modifiers |
+| Fn + J | Alternate repeat: send the counterpart of a supported key |
+| Fn + L | Toggle Caps Word |
+
+**Repeat:** Type a letter, then use Fn + K to type it again. Modifier and Fn keys do not replace the remembered key.
+
+**Alternate repeat:** After Left, Fn + J sends Right; after Home, it sends End; after Backspace, it sends Delete. Only supported key pairs have an alternate; this is not a general undo command.
+
+**Caps Word:** Press Fn + L, release Fn, then type a name such as `CONFIG_VALUE`. Letters are capitalized and the minus key produces an underscore. Digits, underscores, Backspace, and Delete keep Caps Word active. Space or most other punctuation ends it. It also turns off after five seconds of inactivity, or when toggled again with Fn + L.
+
+The **Caps key glows amber while Caps Word is active**, then returns to the normal lighting effect. The indicator follows RGB brightness and requires lighting enabled with brightness above zero. The Caps key itself sends Escape/Fn rather than ordinary Caps Lock.
+
+### Media and system controls
+
+| Shortcut | Action in both layouts |
+|---|---|
+| Fn + F1 / F2 | Screen brightness down / up |
+| Fn + F5 / F6 | Keyboard lighting brightness down / up |
+| Fn + F7 | Previous track |
+| Fn + F8 | Play / pause |
+| Fn + F9 | Next track |
+| Fn + F10 | Mute |
+| Fn + F11 / F12 | Volume down / up |
+
+Fn + F3/F4 sends **Mission Control/Launchpad in Dvorak mode**, or **Task View/File Explorer in QWERTY mode**. Screen brightness and system shortcuts depend on the computer's OS and desktop bindings.
+
+### Lighting and wireless controls
+
+| Shortcut | Action |
+|---|---|
+| Top-right lighting key | Next lighting effect |
+| Fn + lighting key | Toggle lighting on/off |
+| Fn + Page Up | Next lighting effect |
+| Fn + Page Down / Home | Hue increase / decrease |
+| Fn + Up arrow / End | Lighting brightness increase / decrease |
+| Fn + 1 / 2 / 3 | Select Bluetooth device slot 1 / 2 / 3 |
+| Hold Fn + 1 / 2 / 3 for more than two seconds | Pair a device with that Bluetooth slot |
+| Fn + B | Show battery level on the number-row LEDs |
+| Fn + N | Toggle N-key rollover for many simultaneous keypresses |
+
+Bluetooth slot selection and pairing require **Bluetooth mode** on the connection switch. Battery display works while wireless and disconnected from USB power.
+
+VIA can remap these bindings. Its layers are **0: Dvorak, 1: Dvorak Fn, 2: QWERTY, 3: QWERTY Fn**. Saved VIA mappings can override the compiled defaults; if shortcuts differ after flashing, check the corresponding VIA layer.
+
 ## Prerequisites
 
 Install the QMK toolchain:
@@ -32,12 +106,12 @@ Add that line to your `~/.bashrc` or `~/.zshrc` to make it permanent.
 ## Build
 
 ```sh
-make keychron/k2_pro/ansi/rgb:via
+make keychron/k2_pro/ansi/rgb:custom
 ```
 
-This compiles the firmware with [VIA](https://usevia.app/) support, which lets you remap keys and change RGB effects from a browser app without reflashing.
+This builds the custom layout documented above with [VIA](https://usevia.app/) support, which lets you remap keys and change RGB effects from a browser app without reflashing. The output is `keychron_k2_pro_ansi_rgb_custom.bin` in the repository root.
 
-> If you don't want VIA, you can use `make keychron/k2_pro/ansi/rgb:default` instead. You only need to build **one**, not both.
+> The `via` and `default` keymaps are stock layouts and do not include these custom features. Use `custom` to keep Dvorak switching and the shortcuts above.
 
 ## Flash
 
@@ -48,7 +122,7 @@ The keyboard must be in wired mode. Flashing does not work over Bluetooth.
 ### Step 2: Run the flash command
 
 ```sh
-make keychron/k2_pro/ansi/rgb:via:flash
+make keychron/k2_pro/ansi/rgb:custom:flash
 ```
 
 The firmware will compile (if not already built) and then the terminal will print a message saying it's **waiting for the keyboard to enter bootloader mode**. Don't touch anything yet — leave this running.

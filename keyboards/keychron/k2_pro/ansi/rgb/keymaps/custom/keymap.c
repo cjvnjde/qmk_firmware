@@ -58,10 +58,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LCTL,  KC_LGUI,  KC_LALT,                                KC_SPC,                                 KC_RALT,  FN_QWERTY, KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT),
 
     [QWERTY_FN] = LAYOUT_ansi_84(
-        _______,  KC_BRID,  KC_BRIU,  KC_TASK,  KC_FILE,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,  KC_VOLU,  _______,  _______,  _______,  _______,  UG_TOGG,
+        _______,  KC_BRID,  KC_BRIU,  KC_TASK,  KC_FILE,  UG_VALD,  UG_VALU,  KC_MPRV,  KC_MPLY,  KC_MNXT,  KC_MUTE,  KC_VOLD,  KC_VOLU,  _______,  _______,  UG_TOGG,
         _______,  BT_HST1,  BT_HST2,  BT_HST3,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            UG_NEXT,
         _______,  KC_HOME,  KC_UP,    KC_END,   KC_PGUP,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            UG_HUEU,
         _______,  KC_LEFT,  KC_DOWN,  KC_RGHT,  KC_PGDN,  _______,  _______,  QK_AREP,  QK_REP,   CW_TOGG,  _______,  _______,            _______,            UG_HUED,
         _______,            _______,  _______,  _______,  _______,  BAT_LVL,  NK_TOGG,  _______,  _______,  _______,  _______,            _______,  UG_VALU,  UG_VALD,
         _______,  _______,  _______,                                _______,                                _______,  _______,  _______,  _______,  _______,  _______)
 };
+
+// clang-format on
+
+#ifdef RGB_MATRIX_ENABLE
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    // Draw after the normal indicators so Caps Word remains visible on Caps.
+    if (is_caps_word_on() && CAPS_LOCK_INDEX >= led_min && CAPS_LOCK_INDEX < led_max) {
+        uint8_t brightness = rgb_matrix_get_val();
+        rgb_matrix_set_color(CAPS_LOCK_INDEX, brightness, brightness / 2, 0);
+    }
+    return true;
+}
+#endif
