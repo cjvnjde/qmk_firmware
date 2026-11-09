@@ -68,6 +68,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 // clang-format on
 
+layer_state_t default_layer_state_set_user(layer_state_t state) {
+    if (state != default_layer_state) {
+        // Select an explicit desktop language for each firmware base layout.
+        if (state == (1UL << DVORAK_BASE)) {
+            tap_code(KC_F13);
+        } else if (state == (1UL << QWERTY_BASE)) {
+            tap_code(KC_F14);
+        }
+    }
+    return state;
+}
+
 #ifdef RGB_MATRIX_ENABLE
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     // Draw after the normal indicators so Caps Word remains visible on Caps.

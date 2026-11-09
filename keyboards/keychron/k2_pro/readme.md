@@ -18,6 +18,8 @@ The keymap is named **`custom`** ([source](ansi/rgb/keymaps/custom/keymap.c)). I
 
 * Set the **Mac/Win side switch to Mac for Dvorak**, or **Win for QWERTY**. This switch selects the typing layout; both positions keep the same Ctrl/Win/Alt modifier arrangement.
 * Keep the computer's English input layout set to **US QWERTY**. The keyboard applies Dvorak itself; enabling Dvorak on the computer as well applies a second conversion.
+* Moving the switch **to Dvorak sends F13** to select **US**, and moving it **to QWERTY sends F14** to select **Russian**. The paired Hyprland bindings run `hyprctl switchxkblayout all 0` and `hyprctl switchxkblayout all 1`, respectively, selecting an explicit language on all keyboards rather than toggling.
+* This is a switch-change notification, not persistent synchronization: if the desktop misses it while disconnected or logged out, flip away from your desired position and back after reconnecting.
 * **Tap Caps Lock for Escape**, or **hold Caps Lock to access Fn shortcuts**. The regular Fn key works too. Release the held key to return to the typing layer.
 * **F1–F12 send ordinary function keys** without Fn in both layouts.
 
